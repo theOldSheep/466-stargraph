@@ -3,6 +3,7 @@ import numpy
 import argparse
 from tqdm import tqdm
 import const
+import util
 
 def sample_stargraph(path_len, n_paths):
     total_nodes_n = 1 + (path_len - 1) * n_paths
@@ -65,12 +66,10 @@ if __name__ == '__main__':
             dataset.append(sample_stargraph(pl, np))
             pbar.update(1)
     # save
-    base_path = os.path.join(os.path.dirname(__file__), "data")
     file_path = f"{pl}x{np}_{ns}.txt"
-    full_path = os.path.join(base_path, file_path)
+    full_path = util.get_abs_filepath(util.PATH_DATA, file_path)
     print(f"Saving data to {full_path}")
     print(f"Sample data: \n{dataset[0]}")
-    if not os.path.exists(base_path):
-        os.mkdir(base_path)
+    os.makedirs(os.path.dirname(full_path), exist_ok=True)
     with open(full_path, "w") as file:
         file.write('\n'.join(dataset))
